@@ -14,6 +14,7 @@
 		85E266142384335900DC44B6 /* MyNotes.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 85E266122384335900DC44B6 /* MyNotes.xcdatamodeld */; };
 		85E266162384335A00DC44B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 85E266152384335A00DC44B6 /* Assets.xcassets */; };
 		85E266192384335A00DC44B6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85E266172384335A00DC44B6 /* LaunchScreen.storyboard */; };
+		85E266212384355500DC44B6 /* NotesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85E266202384355500DC44B6 /* NotesTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		85E266152384335A00DC44B6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		85E266182384335A00DC44B6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		85E2661A2384335A00DC44B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		85E266202384355500DC44B6 /* NotesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 				85E266172384335A00DC44B6 /* LaunchScreen.storyboard */,
 				85E2661A2384335A00DC44B6 /* Info.plist */,
 				85E266122384335900DC44B6 /* MyNotes.xcdatamodeld */,
+				85E266202384355500DC44B6 /* NotesTableViewController.swift */,
 			);
 			path = MyNotes;
 			sourceTree = "<group>";
@@ -145,6 +148,7 @@
 				85E2660A2384335900DC44B6 /* AppDelegate.swift in Sources */,
 				85E2660C2384335900DC44B6 /* SceneDelegate.swift in Sources */,
 				85E266142384335900DC44B6 /* MyNotes.xcdatamodeld in Sources */,
+				85E266212384355500DC44B6 /* NotesTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -298,7 +302,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = Joe.MyNotes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -316,7 +320,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = Joe.MyNotes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
