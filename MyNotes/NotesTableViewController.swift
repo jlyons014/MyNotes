@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import UserNotifications
 
 class NotesTableViewController: UITableViewController {
     
@@ -18,17 +19,22 @@ class NotesTableViewController: UITableViewController {
     // create an array of ShoppingList entities
        var notes = [Notes] ()
     
+    // create a variable that will contain the row of the selected shopping list
+    var selectedNote: Notes?
+    
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+         // call load shoppinh list items method
+               loadNotes()
+               
+               // make row height larger
+               self.tableView.rowHeight = 84.0
     }
+    
+    
     
     
     // fetch ShoppingLists from core data
@@ -52,6 +58,8 @@ class NotesTableViewController: UITableViewController {
 
     // save shoppingList entity
     func saveNotes () {
+        
+         
         do {
             // use context to save ShoppingLists into Core Data
             try context.save()
@@ -64,11 +72,53 @@ class NotesTableViewController: UITableViewController {
         
     }
     
+    func deleteNote(item: Notes){
+        context.delete(item)
+        do{
+            try context.save()
+        } catch {
+            print("Error deleting Note from core data!")
+        }
+        loadNotes()
+    }
+    
+    func allNotesDeletedNotification() {
+        
+        var done = true
+        
+        for item in notes {
+          
+            if notes[0] == nil{
+                // set done to false
+                done = false
+            }
+        }
+        
+        // check if done is true
+        if done == true {
+            
+            // create content objejct that controls the content and sound of the notification
+            let content = UNMutableNotificationContent()
+            content.title = "MyNotes"
+            content.body = "All Notes Deleted!"
+            content.sound = UNNotificationSound.default
+            
+            // create trigger object that defines when the notification will be sent and if it
+            // should be sent repeatidly
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+            
+            // create request object that is responsible for creating the notification
+            let request = UNNotificationRequest(identifier: "notesIdentifier", content: content, trigger: trigger)
+            
+            // post the notification
+            UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+        }
+    }
+    
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         
         var titleTextField = UITextField()
         var typeTextField = UITextField()
-        var dateTextField = UITextField()
         
         
         // create an Alert controllerr
@@ -82,8 +132,7 @@ class NotesTableViewController: UITableViewController {
             
             // get name, store, and date input by the user and store them in ShoppingList entity
             newNote.title = titleTextField.text!
-            newNote.type = typeTextField.text!
-            newNote.date = dateTextField.text!
+            newNote.type = "Type: " + typeTextField.text!
             
             // add shoppingList entity into array
             self.notes.append(newNote)
@@ -118,13 +167,7 @@ class NotesTableViewController: UITableViewController {
             typeTextField.placeholder = "Enter Type"
             typeTextField.addTarget(self, action: #selector((self.alertTextFieldDidChange)), for: .editingChanged)
         })
-        // add the text fields into the alert controller
-        alert.addTextField(configurationHandler: { (field) in
-            dateTextField = field
-            dateTextField.placeholder = "Enter Date"
-            dateTextField.addTarget(self, action: #selector((self.alertTextFieldDidChange)), for: .editingChanged)
-        })
-        
+     
         // display the alert controller
         present(alert, animated: true, completion: nil)
     }
@@ -139,17 +182,15 @@ class NotesTableViewController: UITableViewController {
         
         // get references to the text in the Text Fields
         if let title = alertController.textFields![0].text, let
-            type = alertController.textFields![1].text, let
-            date = alertController.textFields![2].text {
+            type = alertController.textFields![1].text {
             
             //trim whitespaces from the text
             let trimmedTitle = title.trimmingCharacters(in: .whitespaces)
             let trimmedType = type.trimmingCharacters(in: .whitespaces)
-            let trimmedDate = date.trimmingCharacters(in: .whitespaces)
             
             // check if the trimmed text isnt empty and if it isnt, enable the action
             // that allows the user to add a ShoppingList
-            if(!trimmedTitle.isEmpty && !trimmedType.isEmpty && !trimmedDate.isEmpty) {
+            if(!trimmedTitle.isEmpty && !trimmedType.isEmpty) {
                 action.isEnabled = true
             }
         }
@@ -176,31 +217,28 @@ class NotesTableViewController: UITableViewController {
         // Configure the cell...
         let Notes = notes[indexPath.row]
         cell.textLabel?.text = Notes.title!
-        cell.detailTextLabel?.text = Notes.type! + " " + Notes.date!
+        cell.detailTextLabel?.text = Notes.type!
         
         return cell
     }
     
 
-    /*
+    
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         // Return false if you do not want the specified item to be editable.
         return true
     }
-    */
+    
 
-    /*
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
+          let item = notes[indexPath.row]
+          deleteNote(item: item)
+        }
+        }
 
     /*
     // Override to support rearranging the table view.
